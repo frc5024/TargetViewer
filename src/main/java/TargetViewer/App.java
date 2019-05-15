@@ -4,12 +4,16 @@
 package TargetViewer;
 
 import java.awt.Color;
+import java.awt.Point;
 
 import hsa2.GraphicsConsole;
 
 public class App {
     NTInterface networktable = new NTInterface("vision", 5024);
     GraphicsConsole gc = new GraphicsConsole(800, 600, "TargetViewer");
+
+    Point robot;
+    Point target;
 
     public static void main(String[] args) {
         new App();
@@ -27,9 +31,31 @@ public class App {
     void setup() {
         gc.setBackgroundColor(Color.BLACK);
         gc.clear();
+        gc.setLocationRelativeTo(null);
+        gc.setAntiAlias(true);
+
+        // Set up position points
+        this.robot = new Point((gc.getDrawWidth() / 2), gc.getDrawHeight());
+        this.target = new Point((gc.getDrawWidth() / 2), gc.getDrawHeight() / 2);
     }
 
     void loop() {
-        
+        synchronized (gc) {
+            // Update target
+            Point rel_target = DrawHelper.getRelativeAngularPoint(this.networktable.getDistance(),
+                    this.networktable.getAngle());
+            Point abs_target = DrawHelper.mkAbsolutePoint(this.robot, rel_target);
+            this.target.setLocation((int)abs_target.getX(), (int)abs_target.getY());
+
+            // Draw the "robot"
+            gc.setColor(Color.white);
+            gc.fillRect((int)this.robot.getX() - 20, (int)this.robot.getY() - 10, 40, 10);
+
+            // Draw the crosshair
+            gc.setColor(Color.white);
+            gc.drawLine(0, (int) this.target.getY(), gc.getDrawWidth(),
+                    (int) this.target.getY());
+            gc.drawLine((int) this.target.getX(), 0, (int) this.target.getX(), gc.getDrawHeight());
+        }
     }
 }

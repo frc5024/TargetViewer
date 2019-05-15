@@ -15,7 +15,7 @@ public class NTInterface {
 
     double fov = 0.0;
     double angle = 0.0;
-    double distance = 0.0;
+    double distance = 10.0;
 
     public NTInterface(String table, int team) {
         this.table = inst.getTable(table);
