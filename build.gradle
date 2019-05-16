@@ -35,6 +35,9 @@ dependencies {
     compile name: 'wpiutil-java-3.0.0'
     compile name: 'ntcore-java-4.0.0'
     compile name: 'ntcore-jni-4.0.0-all'
+
+    // JSON
+    // runtime 'com.github.cliftonlabs:json-simple:3.1.0'
 }
 
 // Define the main class for the application

@@ -11,6 +11,7 @@ import hsa2.GraphicsConsole;
 public class App {
     NTInterface networktable = new NTInterface("vision", 5024);
     GraphicsConsole gc = new GraphicsConsole(800, 600, "TargetViewer");
+    Interpolator map = new Interpolator(0.0, 3.0, 0.0, gc.getDrawHeight());
 
     Point robot;
     Point target;
@@ -23,6 +24,8 @@ public class App {
         setup();
 
         while (true) {
+            this.networktable.update();
+            
             loop();
             gc.sleep(10);
         }
@@ -41,15 +44,17 @@ public class App {
 
     void loop() {
         synchronized (gc) {
+            gc.clear();
+            
             // Update target
-            Point rel_target = DrawHelper.getRelativeAngularPoint(this.networktable.getDistance(),
+            Point rel_target = DrawHelper.getRelativeAngularPoint(map.getVal(this.networktable.getDistance()),
                     this.networktable.getAngle());
             Point abs_target = DrawHelper.mkAbsolutePoint(this.robot, rel_target);
             this.target.setLocation((int)abs_target.getX(), (int)abs_target.getY());
 
             // Draw the "robot"
             gc.setColor(Color.white);
-            gc.fillRect((int)this.robot.getX() - 20, (int)this.robot.getY() - 10, 40, 10);
+            gc.fillRect((int)this.robot.getX() - 20, (int)this.robot.getY() - 20, 40, 20);
 
             // Draw the crosshair
             gc.setColor(Color.white);
