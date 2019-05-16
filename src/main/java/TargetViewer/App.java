@@ -25,7 +25,6 @@ public class App {
 
         while (true) {
             this.networktable.update();
-            
             loop();
             gc.sleep(10);
         }
@@ -45,7 +44,7 @@ public class App {
     void loop() {
         synchronized (gc) {
             gc.clear();
-            
+
             // Update target
             Point rel_target = DrawHelper.getRelativeAngularPoint(map.getVal(this.networktable.getDistance()),
                     this.networktable.getAngle());
